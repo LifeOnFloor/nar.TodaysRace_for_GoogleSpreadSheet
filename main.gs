@@ -36,7 +36,7 @@ function initProperties() {
 
   let properties = PropertiesService.getScriptProperties();  // スクリプトプロパティの初期化
   let init_properties = {
-    'track':startThisTrack,
+    'track':startThisTrack + 1,
     'startRaceIndex':startThisRace,
     'trackNameArray':JSON.stringify(track_name_array),
     'folderDateId':folder_date_id
@@ -70,7 +70,7 @@ function main() {
    * 中断前に状態を保存し、1分後に再開できるようトリガーを設置します。
    */
   const properties = PropertiesService.getScriptProperties();
-  const trackStart = Number(properties.getProperty('track')) + 1;
+  const trackStart = Number(properties.getProperty('track'));
   let startRaceIndex = Number(properties.getProperty('startRaceIndex'));
   const trackNameArray = JSON.parse(properties.getProperty('trackNameArray'));
   const yyyy = trackNameArray[0];
