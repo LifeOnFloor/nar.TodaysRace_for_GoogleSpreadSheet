@@ -5,7 +5,7 @@
  */
 
 /** 注意
- * 2分以内に終わらなければ自動的に終了1分後に再起動します。
+ * 1分以内に終わらなければ自動的に終了1分後に再起動します。(2分にするとGASの制限時間6分を超えてエラーになることが稀にあったため)
  * 画面左の「トリガー」ページで再起動用のトリガーが設定されていることが確認できます。
  * 
  * トリガーは自動的に削除されます。手動で削除する必要はありません。
@@ -34,7 +34,7 @@ function initProperties() {
   
   let folder_date_id = dir_folder(yyyy, mmdd).getId();       // スプレッドシートの保存フォルダー
 
-  let properties = PropertiesService.getScriptProperties();  // スクリプトプロパティの初期化
+  let properties = PropertiesService.getScriptProperties();
   let init_properties = {
     'track':startThisTrack + 1,
     'startRaceIndex':startThisRace,
@@ -66,7 +66,7 @@ function deleteTrigger(functionName) {
 function main() {
   /**
    * スプレッドシートへの書き込みを行う関数です。
-   * GASは1回6分以上の実行ができないので、実行時間が2分を超えると一時中断します。
+   * 実行時間が1分を超えると一時中断します。
    * 中断前に状態を保存し、1分後に再開できるようトリガーを設置します。
    */
   const properties = PropertiesService.getScriptProperties();
@@ -80,7 +80,7 @@ function main() {
   const startTime = new Date().getTime();
   const isLastRace = (raceIndex) => raceIndex === 12;
   const isLastTrack = (track) => track === trackNameArray.length - 1;
-  const isTimeout = (startTime) => (new Date().getTime() - startTime) / (1000 * 60) >= 2;
+  const isTimeout = (startTime) => (new Date().getTime() - startTime) / (1000 * 60) >= 1;
 
   for (let track = trackStart; track < trackNameArray.length; track++) {
     const trackName = trackNameArray[track];
@@ -93,7 +93,7 @@ function main() {
       let r = `0${raceIndex}`.slice(-2);
       let race_id = `${yyyy}${trackId}${mmdd}${r}`;
 
-      Logger.log([race_id, trackName, raceIndex]);
+      Logger.log([race_id, trackName, raceIndex]);              // 実行ログの出力
 
       let race_data_info = race(race_id);                       // 出走馬の過去戦績とレース距離
       let data = race_data_info[0];
@@ -119,6 +119,7 @@ function main() {
       }
       
       preprocessingFilterSheet(sheet, race_distance, trackName, yyyy, mmdd);  // シートの前処理
+      SpreadsheetApp.flush();
       if (!isDataExist(sheet)) {continue}
       preprocessingSortSheet(sheet);
 
@@ -150,6 +151,7 @@ function main() {
   }
   deleteTrigger('main');                                          // 最後に不要なトリガーを削除
 }
+
 
 
 /**
