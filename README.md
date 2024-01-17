@@ -2,6 +2,7 @@
 GoogleAppScript用のスクリプトです。
 
 新しいプロジェクトを立ち上げ、ファイルにmain.gsをインポートしてください。
+
 ライブラリにParserを追加してください。
 
 Option:
