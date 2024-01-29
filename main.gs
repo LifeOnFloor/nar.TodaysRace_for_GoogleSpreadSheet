@@ -25,7 +25,7 @@ function initProperties() {
    * 必要なら、thisDate, startThisTrack, startThisRaceを変更してください
    */
   const thisDate = 0;                                        // 0：当日、1:次の日を取得
-  const startThisTrack = 1;                                  // 1:競馬場リストの1番目からスタート
+  const startThisTrack = 1;                                  // 1:1番目の競馬場からスタート
   const startThisRace = 1;                                   // 1:1Rからスタート
 
   let track_name_array = todays_track_name(thisDate);
